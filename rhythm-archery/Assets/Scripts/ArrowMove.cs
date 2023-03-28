@@ -4,30 +4,42 @@ using UnityEngine;
 
 public class ArrowMove : MonoBehaviour
 {
-    private Vector3 destination;
+    private Vector3 target;
     private float duration;
     private float speed;
 
     // Start is called before the first frame update
     void Start()
     {
-        Vector3 toDestination = destination - transform.position;
-        speed = toDestination.magnitude / duration;
+        Vector3 toTarget = target - transform.position;
+        speed = toTarget.magnitude / duration;
     }
 
     // Update is called once per frame
     void Update()
     {
-        Vector3 toDestination = destination - transform.position;
-        if (toDestination.sqrMagnitude < speed * Time.deltaTime)
+        if (target == null || duration == null) return;
+
+        Vector3 toTarget = target - transform.position;
+        if (toTarget.sqrMagnitude < speed * Time.deltaTime)
         {
-            transform.position = destination;
+            transform.position = target;
             Destroy(this);
         }
         else
         {
-            Vector3 direction = toDestination.normalized;
+            Vector3 direction = toTarget.normalized;
             transform.position += direction * speed * Time.deltaTime;
         }
+    }
+
+    public void SetTarget(Vector3 target)
+    {
+        this.target = target;
+    }
+
+    public void SetDuration(float duration)
+    {
+        this.duration = duration;
     }
 }
