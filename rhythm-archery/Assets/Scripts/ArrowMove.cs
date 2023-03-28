@@ -5,7 +5,7 @@ using UnityEngine;
 public class ArrowMove : MonoBehaviour
 {
     private Vector3 target;
-    private float duration;
+    private float duration = -1;
     private float speed;
 
     // Start is called before the first frame update
@@ -18,7 +18,7 @@ public class ArrowMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (target == null || duration == null) return;
+        if (target == null || duration == -1) return;
 
         Vector3 toTarget = target - transform.position;
         if (toTarget.sqrMagnitude < speed * Time.deltaTime)
