@@ -36,7 +36,10 @@ public class ArrowThrower : MonoBehaviour
 
         GameObject thisArrow = Instantiate(arrow, Vector3.zero, Quaternion.identity);
 
-        Vector3 arrowTarget = new(target.transform.position.x + radius * to * Mathf.Cos(angle), target.transform.position.y + radius * to * Mathf.Sin(angle));
+        Vector3 arrowTarget = new(
+            target.transform.position.x + radius * to * Mathf.Cos(angle),
+            target.transform.position.y + radius * to * Mathf.Sin(angle),
+            target.transform.position.z);
         thisArrow.GetComponent<ArrowMove>().SetTarget(arrowTarget);
         thisArrow.GetComponent<ArrowMove>().SetDuration(duration);
     }
