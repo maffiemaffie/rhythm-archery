@@ -19,6 +19,9 @@ public class GameManager : MonoBehaviour
 
     void OnFire()
     {
-        GetComponent<ArrowThrower>().Throw(0f);
+        float offset = GetComponent<BeatManager>().CurrentOffset;
+        if (offset == -1) return;
+
+        GetComponent<ArrowThrower>().Throw(offset);
     }
 }

@@ -1,3 +1,4 @@
+using UnityEngine;
 using System;
 using System.Collections.Generic;
 
@@ -20,18 +21,19 @@ public class Beatmap
     public Beatmap(IEnumerable<float> hits)
     {
         this.hits = hits;
+        beatEvents = new List<BeatEvent>();
     }
 
     /// <summary>
-    /// Method sets up a new set of prep triggers with the given delay and event handler.
+    /// Method sets up a new set of triggers with the given offset and event handler.
     /// </summary>
-    /// <param name="predelay">The prep in seconds before a hit happens that this prep should be called.</param>
-    /// <param name="handler">The method called when the prep is triggered.</param>
-    public void AddPrep(float predelay, EventHandler<BeatEventArgs> handler)
+    /// <param name="offset">The offset in seconds after a hit happens that this event should be raised.</param>
+    /// <param name="handler">The method called when the event is raised.</param>
+    public void AddOffset(float offset, EventHandler<BeatEventArgs> handler)
     {
         foreach (float hit in hits)
         {
-            BeatEvent thisEvent = new BeatEvent(hit - predelay);
+            BeatEvent thisEvent = new BeatEvent(hit - offset);
             thisEvent.BeatEventTriggered += handler;
             beatEvents.Add(thisEvent);
         }
@@ -49,12 +51,14 @@ public class Beatmap
         int end = beatEvents.BinarySearch(new BeatEvent(to));
 
         if (start < 0) start = ~start;
-        if (end < 0) end = ~end;
+        if (end < 0) end = ~end - 1;
 
         while (start > 0 && beatEvents[start - 1].Timestamp == from) start--;
         while (end < beatEvents.Count - 1 && beatEvents[end + 1].Timestamp == to) end++;
 
-        foreach (BeatEvent trigger in beatEvents.GetRange(start, end))
+        if (end < start) return;
+
+        foreach (BeatEvent trigger in beatEvents.GetRange(start, end - start))
         {
             trigger.Trigger(to);
         }
