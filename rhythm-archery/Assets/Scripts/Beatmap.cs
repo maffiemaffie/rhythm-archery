@@ -33,7 +33,7 @@ public class Beatmap
     {
         foreach (float hit in hits)
         {
-            BeatEvent thisEvent = new BeatEvent(hit - offset);
+            BeatEvent thisEvent = new BeatEvent(hit + offset);
             thisEvent.BeatEventTriggered += handler;
             beatEvents.Add(thisEvent);
         }

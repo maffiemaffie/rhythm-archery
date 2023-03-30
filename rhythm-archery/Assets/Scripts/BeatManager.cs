@@ -46,10 +46,13 @@ public class BeatManager : MonoBehaviour
             beatmap = new Beatmap(hitmap.hits);
             beatmap.AddOffset(-tolerance, (sender, e) => { beatStack.Push(((BeatEvent)sender).Timestamp); });
             beatmap.AddOffset(tolerance, (sender, e) => { beatStack.Pop(); });
+            beatmap.AddOffset(0f, (sender, e) => { Debug.Log("hi maffie"); });
         }
 
         audioData = GetComponent<AudioSource>();
         lastPlayheadPosition = audioData.time;
+
+        audioData.PlayDelayed(1);
     }
 
     // Update is called once per frame
