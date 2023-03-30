@@ -1,4 +1,4 @@
-using UnityEngine;
+using UnityEngine; // debug only
 using System;
 using System.Collections.Generic;
 
@@ -37,7 +37,7 @@ public class Beatmap
             thisEvent.BeatEventTriggered += handler;
             beatEvents.Add(thisEvent);
         }
-        beatEvents.Sort();
+        beatEvents.Sort(); // TODO sorting isnt working lol
     }
 
     /// <summary>

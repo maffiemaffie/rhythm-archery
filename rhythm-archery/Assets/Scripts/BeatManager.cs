@@ -9,7 +9,7 @@ public class BeatManager : MonoBehaviour
     private float lastPlayheadPosition;
     public Beatmap beatmap;
 
-    private Stack<float> beatStack = new Stack<float>();
+    private List<float> beatDeque = new List<float>();
 
     [SerializeField]
     private string hitPath;
@@ -21,7 +21,7 @@ public class BeatManager : MonoBehaviour
     {
         get
         {
-            if (beatStack.Count == 0) return BeatPlaybackState.Standby;
+            if (beatDeque.Count == 0) return BeatPlaybackState.Standby;
             return BeatPlaybackState.Open;
         }
     }
@@ -30,8 +30,8 @@ public class BeatManager : MonoBehaviour
     {
         get
         {
-            if (beatStack.Count == 0) return -1;
-            return Mathf.Abs(beatStack.Peek() - audioData.time) / tolerance;
+            if (beatDeque.Count == 0) return -1;
+            return Mathf.Abs(beatDeque[beatDeque.Count - 1] - audioData.time) / tolerance;
         }
     }
 
@@ -44,8 +44,8 @@ public class BeatManager : MonoBehaviour
             Hitmap hitmap = JsonUtility.FromJson<Hitmap>(hitmapJSON);
 
             beatmap = new Beatmap(hitmap.hits);
-            beatmap.AddOffset(-tolerance, (sender, e) => { beatStack.Push(((BeatEvent)sender).Timestamp); });
-            beatmap.AddOffset(tolerance, (sender, e) => { beatStack.Pop(); });
+            beatmap.AddOffset(-tolerance, (sender, e) => { beatDeque.Add(((BeatEvent)sender).Timestamp); });
+            beatmap.AddOffset(tolerance, (sender, e) => { beatDeque.RemoveAt(0); });
             beatmap.AddOffset(0f, (sender, e) => { Debug.Log("hi maffie"); });
         }
 
